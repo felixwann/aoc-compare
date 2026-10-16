@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AOC 产品参数对比</title>
+  <style>
+    :root{color-scheme:light;--bg:#f4f6fa;--panel:#fff;--ink:#17253b;--muted:#68758b;--line:#e0e6ef;--accent:#2358dc;--diff:#fff4d8;--missing:#fcecef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}main{max-width:1500px;margin:auto;padding:32px 24px 60px}h1{font-size:30px;letter-spacing:-1px;margin:5px 0 8px}p{margin:0 0 16px;color:var(--muted)}.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:2px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:20px 0}label{cursor:pointer}textarea,input,button{font:inherit}textarea{display:block;width:100%;min-height:108px;resize:vertical;padding:12px;margin:8px 0 12px;border:1px solid #bdc9de;border-radius:8px;color:var(--ink);background:#fbfcff}button{border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:#fff;color:var(--ink);cursor:pointer}button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8babff;outline-offset:2px}.actions,.tools{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.hint{font-size:12px;color:var(--muted)}#status{margin-top:12px}#errors{color:#aa253b;white-space:pre-wrap;overflow-wrap:anywhere}#pending{margin:24px 0}.pending-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}.pending-tools h2{font-size:20px;margin:0}.pending-tools input{margin-left:auto;width:260px;max-width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}#products{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px;max-height:440px;overflow-y:auto;scrollbar-gutter:stable;align-content:start;padding:4px 4px 8px}.product{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:auto auto auto;align-items:center;gap:8px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:10px;min-width:0}.product[data-selected="true"]{border-color:#9eb7f1;background:#f8faff}.product>strong{grid-row:1;grid-column:1/-1;justify-self:start;max-width:100%;overflow-wrap:anywhere}.product>.hint{grid-row:2;grid-column:1/-1;font-size:11px;line-height:1.5}.product>a{grid-row:3;grid-column:1}.product>button:first-child{grid-column:3}.product>button:nth-child(2){grid-column:2}.product strong{font-size:16px;position:relative;cursor:pointer}.product strong:focus-visible{outline:3px solid #8babff;outline-offset:2px}.copy-tip{position:absolute;left:0;top:100%;margin-top:4px;padding:2px 6px;border-radius:4px;background:var(--ink);color:#fff;font-size:11px;font-weight:400;white-space:nowrap;pointer-events:none;z-index:5}.product a{color:var(--accent);font-size:12px}.product button{grid-row:3;padding:3px 8px;font-size:12px;white-space:nowrap}.product button:nth-child(2):not(:disabled){border-color:#bfd0f5;color:var(--accent)}.tools{margin:20px 0 12px}.tools input[type=search]{padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-width:240px}.tools label{white-space:nowrap}#counts{margin-left:auto;color:var(--muted);font-size:12px}.table-wrap{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:12px;background:#fff}table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%}th,td{padding:13px 16px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);text-align:left;vertical-align:top;overflow-wrap:anywhere}thead th{position:sticky;top:0;z-index:3;background:#eef2f9;font-size:15px}thead th:first-child{z-index:4}th:first-child{position:sticky;left:0;background:#f8faff;z-index:1;width:210px}thead th:first-child{background:#eef2f9}td{white-space:pre-wrap}tr.diff.mark td{background:var(--diff)}tr.missing.mark td{background:var(--missing)}.absent{color:#a12c45}.badge{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:4px}.original{display:block;color:var(--muted);font-size:11px;margin-bottom:5px;white-space:normal}details{margin-top:20px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:14px 18px}summary{cursor:pointer;font-weight:600}pre{max-height:440px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 Consolas,monospace}.legend{margin-top:10px;font-size:12px;color:var(--muted)}.swatch{display:inline-block;width:10px;height:10px;border:1px solid #e2d5b2;background:var(--diff);margin-right:4px}.swatch.pink{background:var(--missing);border-color:#e9c7cc}[hidden]{display:none!important}@media(max-width:650px){main{padding:20px 12px}.panel{padding:16px}h1{font-size:25px}#counts{width:100%;margin-left:0}th:first-child{width:150px}.tools{gap:10px}.pending-tools{gap:8px}.pending-tools input{width:100%;margin-left:0}#products{max-height:400px}.product{padding:12px}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">AOC · SPEC COMPARE</div>
+  <h1>把参数放在一起看</h1>
+  <p>从 AOC 官网获取真实参数，按名称对齐，保留每款产品的原始描述。</p>
+  <form id="fetchForm" class="panel">
+    <label for="urls"><strong>产品链接</strong> <span class="hint">每行一个，不限获取条数；已下载的产品 ID 自动跳过</span></label>
+    <textarea id="urls" required spellcheck="false" aria-label="AOC 产品链接，每行一个" rows="6"></textarea>
+    <div class="actions"><button class="primary" id="fetchButton" type="submit" disabled>获取产品</button><span class="hint">获取后保存至 SQLite，显示在下方待对比列表；点击“加入对比”后才参与对比。</span></div>
+    <div id="status" role="status" aria-live="polite">正在读取本地 SQLite…</div>
+    <div id="errors" role="alert"></div>
+  </form>
+  <section id="pending" hidden aria-label="待对比产品">
+    <div class="pending-tools">
+      <h2>待对比产品</h2>
+      <span id="pendingCount" class="hint" role="status"></span>
+      <input id="productSearch" type="search" placeholder="搜索型号或 ID" aria-label="搜索待对比型号或 ID">
+    </div>
+    <div id="products"></div>
+    <div id="pendingEmpty" class="hint" hidden>没有匹配的型号或 ID</div>
+  </section>
+  <section id="result" hidden aria-label="参数对比结果">
+    <div class="tools">
+      <input id="search" type="search" placeholder="搜索参数名称或数值" aria-label="搜索参数名称或数值">
+      <label><input type="checkbox" id="hideSame"> 隐藏相同项</label>
+      <label><input type="checkbox" id="highlight" checked> 高亮不同项</label>
+      <label><input type="checkbox" id="originalNames" checked> 显示原始名称</label>
+      <button id="clearComparison" type="button" disabled>清空全部对比</button>
+      <span id="counts" role="status"></span>
+    </div>
+    <div class="table-wrap"><table id="comparison"><thead></thead><tbody></tbody></table></div>
+    <div class="legend"><span class="swatch"></span>数值不同　<span class="swatch pink"></span>部分产品未列出；“未列出”不代表不支持。仅一款产品时不判定差异。</div>
+    <div class="legend">比较时规范大小写、全半角、空白和数字间的 x/×，保留单位、条件与脚注；最大分辨率与分辨率、色域覆盖率与容积不会自动合并。</div>
+    <details><summary>查看 JSON / 抓取来源</summary><pre id="jsonOutput"></pre></details>
+  </section>
+</main>
+<script>
+'use strict';
+const $ = selector => document.querySelector(selector);
+let data = {products: [], rows: [], errors: []};
+let library = [];
+let busy = true;
+let libraryLoaded = false;
+function node(tag, text, className) {
+  const element = document.createElement(tag);
+  if (text !== undefined) element.textContent = text;
+  if (className) element.className = className;
+  return element;
+}
+function normalized(value) {
+  return value.normalize('NFKC').toLowerCase().replace(/(\d)\s*[x×]\s*(?=\d)/g, '$1×').replace(/\s+/g, ' ').trim().replace(/\s*([():/@,×])\s*/g, '$1');
+}
+function rebuildRows() {
+  const rows = new Map();
+  data.products.forEach((product, index) => product.attributes.forEach(attribute => {
+    const key = attribute.canonical_name.normalize('NFKC').replace(/[\s:：]+/g, '').toLowerCase();
+    if (!rows.has(key)) rows.set(key, {key, name: attribute.canonical_name, cells: data.products.map(() => [])});
+    rows.get(key).cells[index].push({name: attribute.name, value: attribute.value});
+  }));
+  data.rows = [...rows.values()].map(row => {
+    row.values = row.cells.map(cell => cell.length ? cell.map(entry => entry.value).join('\n') : null);
+    row.status = data.products.length < 2 ? 'single' : row.values.includes(null) ? 'missing' : new Set(row.values.map(normalized)).size === 1 ? 'same' : 'different';
+    return row;
+  });
+}
+function syncLibrary(products) {
+  library = products;
+  const saved = new Map(library.map(product => [product.id, product]));
+  data.products = data.products.filter(product => saved.has(product.id)).map(product => saved.get(product.id));
+  rebuildRows();
+}
+function restoreComparisonFromUrl() {
+  const saved = new Map(library.map(product => [product.id, product]));
+  const ids = [...new Set(new URL(location.href).searchParams.getAll('compare'))];
+  data.products = ids.filter(id => saved.has(id)).map(id => saved.get(id));
+  rebuildRows();
+}
+function syncComparisonUrl() {
+  const url = new URL(location.href);
+  url.searchParams.delete('compare');
+  data.products.forEach(product => url.searchParams.append('compare', product.id));
+  // 只替换当前地址，不刷新页面；保留其他查询参数、锚点和已有历史状态。
+  if (url.href !== location.href) history.replaceState(history.state, '', url.href);
+}
+function filterProducts() {
+  const query = $('#productSearch').value.trim().toLowerCase();
+  let visible = 0;
+  $('#products').querySelectorAll('.product').forEach(card => {
+    card.hidden = !card.dataset.search.includes(query);
+    if (!card.hidden) visible++;
+  });
+  $('#pendingCount').textContent = `${query ? '匹配 ' + visible + ' / ' : '共 '}${library.length} 款 · 已加入 ${data.products.length} 款`;
+  $('#pendingEmpty').hidden = visible > 0 || !library.length;
+}
+function render() {
+  $('#pending').hidden = !library.length;
+  $('#result').hidden = !data.products.length;
+  $('#fetchButton').disabled = busy;
+  $('#clearComparison').disabled = busy || !data.products.length;
+  $('#jsonOutput').textContent = JSON.stringify(data, null, 2);
+  $('#products').replaceChildren();
+  library.forEach(product => {
+    const card = node('div', undefined, 'product');
+    const selected = data.products.some(item => item.id === product.id);
+    card.dataset.selected = String(selected);
+    card.dataset.search = (product.model + ' ' + product.id).toLowerCase();
+    const add = node('button', selected ? '已加入对比' : '加入对比');
+    add.type = 'button'; add.disabled = busy || selected;
+    add.setAttribute('aria-label', '加入对比 ' + product.model);
+    add.addEventListener('click', () => {
+      if (data.products.some(item => item.id === product.id)) return;
+      data.products.push(product); rebuildRows(); render();
+      $('#status').textContent = `已加入 ${product.model}；当前对比 ${data.products.length} 款。`;
+    });
+    const remove = node('button', '删除');
+    remove.type = 'button'; remove.disabled = busy;
+    remove.setAttribute('aria-label', '删除已获取产品 ' + product.model);
+    remove.addEventListener('click', async () => {
+      if (!window.confirm(`确认删除已获取的产品 ${product.model}（ID：${product.id}）？\n将从本地 SQLite 和当前对比中删除，需要时可重新获取。`)) return;
+      busy = true; render();
+      try {
+        const response = await fetch('/api/products/delete', {method:'POST', cache:'no-store', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:product.id, confirmed:true})});
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || '删除失败');
+        syncLibrary(library.filter(item => item.id !== result.deleted_id));
+        $('#errors').textContent = '';
+        $('#status').textContent = `已删除 ${product.model}；已获取 ${library.length} 款，当前对比 ${data.products.length} 款。`;
+      } catch (error) {
+        $('#errors').textContent = error.message;
+      } finally {
+        busy = false; render();
+      }
+    });
+    const link = node('a', '官网原始页面'); link.href = product.url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+    const title = node('strong', product.model);
+    title.tabIndex = 0; title.setAttribute('role', 'button');
+    title.setAttribute('aria-label', '复制型号 ' + product.model);
+    title.title = '点击复制型号';
+    const copyTip = node('span', '', 'copy-tip');
+    copyTip.hidden = true; copyTip.setAttribute('role', 'status');
+    title.append(copyTip);
+    let copyTimer;
+    title.addEventListener('click', async () => {
+      clearTimeout(copyTimer); copyTip.hidden = true;
+      try {
+        await navigator.clipboard.writeText(product.model);
+        copyTip.textContent = '复制成功';
+      } catch (error) {
+        copyTip.textContent = '复制失败';
+      }
+      copyTip.hidden = false;
+      copyTimer = setTimeout(() => {copyTip.hidden = true;}, 800);
+    });
+    title.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault(); title.click();
+      }
+    });
+    card.append(remove, add, title, node('div', 'ID：' + product.id + ' · ' + product.attributes.length + ' 条原始记录 · ' + new Date(product.fetched_at).toLocaleString('zh-CN'), 'hint'), link);
+    $('#products').append(card);
+  });
+  filterProducts();
+  const header = node('tr'); header.append(node('th', '参数'));
+  data.products.forEach(product => {
+    const cell = node('th', product.model);
+    const remove = node('button', '移除对比');
+    remove.type = 'button'; remove.disabled = busy;
+    remove.setAttribute('aria-label', '移除对比 ' + product.model);
+    remove.addEventListener('click', () => {
+      data.products = data.products.filter(item => item.id !== product.id); rebuildRows(); render();
+      $('#status').textContent = `已移除对比 ${product.model}；产品仍保留在待对比列表。`;
+    });
+    cell.append(node('br'), remove); header.append(cell);
+  });
+  [...header.children].forEach(cell => cell.scope = 'col');
+  $('#comparison thead').replaceChildren(header);
+  $('#comparison').style.minWidth = (210 + data.products.length * 300) + 'px';
+  const query = $('#search').value.trim().toLowerCase();
+  const rows = data.rows.filter(row => (!$('#hideSame').checked || row.status !== 'same') && (!query || [row.name, ...row.cells.flatMap(cell => cell.flatMap(entry => [entry.name, entry.value]))].some(value => value.toLowerCase().includes(query))));
+  const body = document.createDocumentFragment();
+  rows.forEach(row => {
+    const tr = node('tr');
+    tr.className = (row.status === 'different' ? 'diff' : row.status) + ($('#highlight').checked ? ' mark' : '');
+    const title = node('th', row.name); title.scope = 'row';
+    title.append(node('span', {same:'相同', different:'不同', missing:'存在缺项', single:'单产品'}[row.status], 'badge')); tr.append(title);
+    row.cells.forEach(cell => {
+      const td = node('td');
+      if (!cell.length) td.append(node('span', '未列出', 'absent'));
+      cell.forEach((entry, index) => {
+        if (index) td.append(node('hr'));
+        if ($('#originalNames').checked) td.append(node('span', entry.name, 'original'));
+        const text = node('span', entry.value === '' ? '（原表为空）' : entry.value);
+        td.append(text);
+      });
+      tr.append(td);
+    });
+    body.append(tr);
+  });
+  if (!rows.length && data.products.length) {
+    const tr = node('tr'), td = node('td', '当前筛选条件下没有参数'); td.colSpan = data.products.length + 1; tr.append(td); body.append(tr);
+  }
+  $('#comparison tbody').replaceChildren(body);
+  const count = status => data.rows.filter(row => row.status === status).length;
+  $('#counts').textContent = `显示 ${rows.length}/${data.rows.length} 项 · 相同 ${count('same')} · 不同 ${count('different')} · 缺项 ${count('missing')}`;
+  if (libraryLoaded && !busy) syncComparisonUrl();
+}
+$('#fetchForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (busy) return;
+  const urls = [...new Set($('#urls').value.split(/\r?\n/).map(url => url.trim()).filter(Boolean))];
+  if (!urls.length) {$('#errors').textContent = '请输入产品链接，每行一个。'; return;}
+  busy = true; render();
+  $('#status').textContent = `正在检查并获取 ${urls.length} 条产品链接，已下载 ID 将跳过…`;
+  $('#errors').textContent = '';
+  try {
+    const response = await fetch('/api/fetch', {method:'POST', cache:'no-store', headers:{'Content-Type':'application/json'}, body:JSON.stringify({urls})});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || '请求失败');
+    // 获取只更新待对比列表；已选择产品继续保留，不自动加入新产品。
+    syncLibrary(result.products);
+    if (!libraryLoaded) {restoreComparisonFromUrl(); libraryLoaded = true;}
+    data.errors = result.errors;
+    $('#errors').textContent = result.errors.map(error => error.url + '\n' + error.message).join('\n\n');
+    $('#status').textContent = `本次下载 ${result.downloaded} 款，跳过已下载 ${result.skipped.length} 款，失败 ${result.errors.length} 条；已获取 ${library.length} 款，当前对比 ${data.products.length} 款。已保存至 ${result.cache.file}。`;
+  } catch (error) {
+    $('#status').textContent = '获取未完成，已有产品和对比结果保留；已成功入库的产品可刷新查看。'; $('#errors').textContent = error.message;
+  } finally {
+    busy = false; render();
+  }
+});
+$('#clearComparison').addEventListener('click', () => {
+  if (busy) return;
+  data.products = []; rebuildRows(); render();
+  $('#status').textContent = '已清空全部对比；已获取产品仍保留在待对比列表。';
+});
+$('#productSearch').addEventListener('input', filterProducts);
+['#search', '#hideSame', '#highlight', '#originalNames'].forEach(selector => $(selector).addEventListener(selector === '#search' ? 'input' : 'change', render));
+async function loadLocalData() {
+  try {
+    const response = await fetch('/api/cache', {cache:'no-store'});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || '读取本地 SQLite 失败');
+    syncLibrary(result.products);
+    restoreComparisonFromUrl();
+    libraryLoaded = true;
+    $('#status').textContent = `已从 ${result.cache.file} 载入 ${library.length} 款待对比产品，已按 URL 恢复 ${data.products.length} 款对比；点击“获取产品”仅下载尚未保存的 ID。`;
+  } catch (error) {
+    $('#status').textContent = '本地数据未能载入。'; $('#errors').textContent = error.message;
+  } finally {
+    busy = false; render();
+  }
+}
+loadLocalData();
+</script>
+</body>
+</html>
