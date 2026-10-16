@@ -28,6 +28,8 @@ CACHE_LOCK = threading.Lock()
 FETCH_LOCK = threading.Lock()
 DATABASE_FILE = ROOT / "aoc_parameters.sqlite3"
 SCHEMA_FILE = ROOT / "001_create_aoc_products.sql"
+FIELDS_SCHEMA_FILE = ROOT / "002_create_product_fields.sql"
+EDITABLE_FIELDS = {"price": "价格", "purchase_url": "购买链接"}
 VOID_TAGS = set("area base br col embed hr img input link meta param source track wbr".split())
 # 仅合并含义明确的名称；最大分辨率/分辨率、色域覆盖率/色域容积等保留区别。
 ALIAS_GROUPS = {
@@ -268,7 +270,9 @@ def scrape_product(url):
 def compare_products(products):
     ordered = {}
     for product_index, product in enumerate(products):
-        for attribute in product["attributes"]:
+        manual = [{"name": label, "canonical_name": label, "value": product.get("fields", {}).get(key, "")}
+                  for key, label in EDITABLE_FIELDS.items() if key != "purchase_url"]
+        for attribute in manual + product["attributes"]:
             label = attribute["canonical_name"]
             key = name_key(label)
             if key not in ordered:
@@ -300,6 +304,7 @@ def product_id(url):
 def init_database():
     with CACHE_LOCK, closing(sqlite3.connect(DATABASE_FILE, timeout=30)) as connection:
         connection.executescript(SCHEMA_FILE.read_text(encoding="utf-8"))
+        connection.executescript(FIELDS_SCHEMA_FILE.read_text(encoding="utf-8"))
 
 
 def read_cache():
@@ -307,8 +312,12 @@ def read_cache():
         rows = connection.execute(
             "SELECT product_id, url, model, fetched_at, source, attributes, notes "
             "FROM products ORDER BY fetched_at, product_id").fetchall()
+        fields = {}
+        for identifier, name, value in connection.execute("SELECT product_id, field_name, value FROM product_fields"):
+            fields.setdefault(identifier, {})[name] = value
     products = [{"id": row[0], "url": row[1], "model": row[2], "fetched_at": row[3],
-                 "source": row[4], "attributes": json.loads(row[5]), "notes": json.loads(row[6])}
+                 "source": row[4], "attributes": json.loads(row[5]), "notes": json.loads(row[6]),
+                 "fields": fields.get(row[0], {})}
                 for row in rows]
     return {"products": products, "saved_at": max((p["fetched_at"] for p in products), default=None)}
 
@@ -379,7 +388,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(404, {"error": "页面不存在"})
 
     def do_POST(self):
-        if self.path not in {"/api/fetch", "/api/compare", "/api/products/delete"}:
+        if self.path not in {"/api/fetch", "/api/compare", "/api/products/delete", "/api/products/update"}:
             return self.reply(404, {"error": "接口不存在"})
         # 服务仅允许本机同源页面发起请求。
         expected_host = f"127.0.0.1:{self.server.server_port}"
@@ -398,6 +407,43 @@ class Handler(BaseHTTPRequestHandler):
             payload = json.loads(self.rfile.read(length).decode("utf-8"))
             if not isinstance(payload, dict):
                 raise ValueError("请求正文必须为对象")
+            if self.path == "/api/products/update":
+                identifier, fields = payload.get("id"), payload.get("fields")
+                if not isinstance(identifier, str) or not re.fullmatch(r"[0-9]+", identifier):
+                    raise ValueError("需要有效产品 ID")
+                if not isinstance(fields, dict) or not fields or set(fields) - EDITABLE_FIELDS.keys():
+                    raise ValueError("仅支持修改价格和购买链接")
+                cleaned = {}
+                for name, value in fields.items():
+                    if not isinstance(value, str):
+                        raise ValueError("字段值必须为文本")
+                    value = value.strip()
+                    if name == "price" and value:
+                        if not re.fullmatch(r"[0-9]{1,9}(?:\.[0-9]{1,2})?", value):
+                            raise ValueError("价格须为非负金额，整数最多9位，小数最多2位；留空可清除")
+                        whole, _, fraction = value.partition(".")
+                        value = str(int(whole)) + "." + fraction.ljust(2, "0")
+                    if name == "purchase_url" and value:
+                        parts = urlsplit(value)
+                        if (len(value) > 4096 or re.search(r"[\s\x00-\x1f\x7f]", value)
+                                or parts.scheme not in {"http", "https"} or not parts.hostname
+                                or parts.username or parts.password or parts.port == 0):
+                            raise ValueError("购买链接须为有效的 HTTP/HTTPS 地址，不能包含空白或账号密码")
+                    cleaned[name] = value
+                identifier = str(int(identifier))
+                # 单产品字段补丁；事务内加写锁，重复保存幂等，不覆盖未提交的其他字段。
+                with CACHE_LOCK, closing(sqlite3.connect(DATABASE_FILE, timeout=30)) as connection:
+                    with connection:
+                        connection.execute("BEGIN IMMEDIATE")
+                        if connection.execute("SELECT 1 FROM products WHERE product_id = ?", (identifier,)).fetchone() is None:
+                            return self.reply(404, {"error": "产品不存在，请刷新列表"})
+                        connection.executemany(
+                            "INSERT INTO product_fields (product_id, field_name, value) VALUES (?, ?, ?) "
+                            "ON CONFLICT(product_id, field_name) DO UPDATE SET value = excluded.value",
+                            [(identifier, name, value) for name, value in cleaned.items()])
+                        saved_fields = dict(connection.execute(
+                            "SELECT field_name, value FROM product_fields WHERE product_id = ?", (identifier,)))
+                return self.reply(200, {"id": identifier, "fields": saved_fields})
             if self.path == "/api/products/delete":
                 identifier = payload.get("id")
                 if (payload.get("confirmed") is not True or not isinstance(identifier, str)
@@ -406,6 +452,7 @@ class Handler(BaseHTTPRequestHandler):
                 # 只删除用户确认的一款；重复删除返回成功，不触及其他记录。
                 with FETCH_LOCK, CACHE_LOCK, closing(sqlite3.connect(DATABASE_FILE, timeout=30)) as connection:
                     with connection:
+                        connection.execute("DELETE FROM product_fields WHERE product_id = ?", (str(int(identifier)),))
                         connection.execute("DELETE FROM products WHERE product_id = ?", (str(int(identifier)),))
                 return self.reply(200, {"deleted_id": str(int(identifier))})
             urls = payload.get("urls")

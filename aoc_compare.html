@@ -6,6 +6,8 @@
   <title>AOC 产品参数对比</title>
   <style>
     :root{color-scheme:light;--bg:#f4f6fa;--panel:#fff;--ink:#17253b;--muted:#68758b;--line:#e0e6ef;--accent:#2358dc;--diff:#fff4d8;--missing:#fcecef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}main{max-width:1500px;margin:auto;padding:32px 24px 60px}h1{font-size:30px;letter-spacing:-1px;margin:5px 0 8px}p{margin:0 0 16px;color:var(--muted)}.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:2px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:20px 0}label{cursor:pointer}textarea,input,button{font:inherit}textarea{display:block;width:100%;min-height:108px;resize:vertical;padding:12px;margin:8px 0 12px;border:1px solid #bdc9de;border-radius:8px;color:var(--ink);background:#fbfcff}button{border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:#fff;color:var(--ink);cursor:pointer}button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8babff;outline-offset:2px}.actions,.tools{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.hint{font-size:12px;color:var(--muted)}#status{margin-top:12px}#errors{color:#aa253b;white-space:pre-wrap;overflow-wrap:anywhere}#pending{margin:24px 0}.pending-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}.pending-tools h2{font-size:20px;margin:0}.pending-tools input{margin-left:auto;width:260px;max-width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}#products{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px;max-height:440px;overflow-y:auto;scrollbar-gutter:stable;align-content:start;padding:4px 4px 8px}.product{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:auto auto auto;align-items:center;gap:8px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:10px;min-width:0}.product[data-selected="true"]{border-color:#9eb7f1;background:#f8faff}.product>strong{grid-row:1;grid-column:1/-1;justify-self:start;max-width:100%;overflow-wrap:anywhere}.product>.hint{grid-row:2;grid-column:1/-1;font-size:11px;line-height:1.5}.product>a{grid-row:3;grid-column:1}.product>button:first-child{grid-column:3}.product>button:nth-child(2){grid-column:2}.product strong{font-size:16px;position:relative;cursor:pointer}.product strong:focus-visible{outline:3px solid #8babff;outline-offset:2px}.copy-tip{position:absolute;left:0;top:100%;margin-top:4px;padding:2px 6px;border-radius:4px;background:var(--ink);color:#fff;font-size:11px;font-weight:400;white-space:nowrap;pointer-events:none;z-index:5}.product a{color:var(--accent);font-size:12px}.product button{grid-row:3;padding:3px 8px;font-size:12px;white-space:nowrap}.product button:nth-child(2):not(:disabled){border-color:#bfd0f5;color:var(--accent)}.tools{margin:20px 0 12px}.tools input[type=search]{padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-width:240px}.tools label{white-space:nowrap}#counts{margin-left:auto;color:var(--muted);font-size:12px}.table-wrap{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:12px;background:#fff}table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%}th,td{padding:13px 16px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);text-align:left;vertical-align:top;overflow-wrap:anywhere}thead th{position:sticky;top:0;z-index:3;background:#eef2f9;font-size:15px}thead th:first-child{z-index:4}th:first-child{position:sticky;left:0;background:#f8faff;z-index:1;width:210px}thead th:first-child{background:#eef2f9}td{white-space:pre-wrap}tr.diff.mark td{background:var(--diff)}tr.missing.mark td{background:var(--missing)}.absent{color:#a12c45}.badge{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:4px}.original{display:block;color:var(--muted);font-size:11px;margin-bottom:5px;white-space:normal}details{margin-top:20px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:14px 18px}summary{cursor:pointer;font-weight:600}pre{max-height:440px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 Consolas,monospace}.legend{margin-top:10px;font-size:12px;color:var(--muted)}.swatch{display:inline-block;width:10px;height:10px;border:1px solid #e2d5b2;background:var(--diff);margin-right:4px}.swatch.pink{background:var(--missing);border-color:#e9c7cc}[hidden]{display:none!important}@media(max-width:650px){main{padding:20px 12px}.panel{padding:16px}h1{font-size:25px}#counts{width:100%;margin-left:0}th:first-child{width:150px}.tools{gap:10px}.pending-tools{gap:8px}.pending-tools input{width:100%;margin-left:0}#products{max-height:400px}.product{padding:12px}}
+    .product>.product-fields{grid-column:1/-1;grid-row:4;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px}.product-fields button{padding:2px 6px}.price{cursor:text;text-decoration:underline dotted;text-underline-offset:3px}.product-fields input{width:120px;padding:3px 6px;border:1px solid var(--line);border-radius:4px}#productDialog{width:440px;max-width:calc(100% - 32px);border:1px solid var(--line);border-radius:12px;padding:22px;color:var(--ink)}#productDialog::backdrop{background:#17243b66}#productDialog h2{font-size:18px;margin:0 0 16px}#editFields label{display:block;margin:12px 0}#editFields input{display:block;width:100%;margin-top:6px;padding:9px;border:1px solid var(--line);border-radius:6px}#editError{color:#aa253b;font-size:12px;overflow-wrap:anywhere}td a{color:var(--accent)}
+    #fetchSection,#productsSection{margin:0;border:0;padding:0;background:transparent;border-radius:0}#fetchSection[open]>summary,#productsSection[open]>summary{margin-bottom:12px}#productsSection>summary{font-size:20px}
   </style>
 </head>
 <body>
@@ -14,20 +16,25 @@
   <h1>把参数放在一起看</h1>
   <p>从 AOC 官网获取真实参数，按名称对齐，保留每款产品的原始描述。</p>
   <form id="fetchForm" class="panel">
+    <details id="fetchSection" open>
+    <summary>获取产品</summary>
     <label for="urls"><strong>产品链接</strong> <span class="hint">每行一个，不限获取条数；已下载的产品 ID 自动跳过</span></label>
     <textarea id="urls" required spellcheck="false" aria-label="AOC 产品链接，每行一个" rows="6"></textarea>
     <div class="actions"><button class="primary" id="fetchButton" type="submit" disabled>获取产品</button><span class="hint">获取后保存至 SQLite，显示在下方待对比列表；点击“加入对比”后才参与对比。</span></div>
     <div id="status" role="status" aria-live="polite">正在读取本地 SQLite…</div>
     <div id="errors" role="alert"></div>
+    </details>
   </form>
   <section id="pending" hidden aria-label="待对比产品">
+    <details id="productsSection" open>
+    <summary>待对比产品</summary>
     <div class="pending-tools">
-      <h2>待对比产品</h2>
       <span id="pendingCount" class="hint" role="status"></span>
-      <input id="productSearch" type="search" placeholder="搜索型号或 ID" aria-label="搜索待对比型号或 ID">
+      <input id="productSearch" type="search" placeholder="搜索型号、ID 或产品属性" aria-label="搜索待对比型号、ID 或产品属性">
     </div>
     <div id="products"></div>
-    <div id="pendingEmpty" class="hint" hidden>没有匹配的型号或 ID</div>
+    <div id="pendingEmpty" class="hint" hidden>没有匹配的型号、ID 或产品属性</div>
+    </details>
   </section>
   <section id="result" hidden aria-label="参数对比结果">
     <div class="tools">
@@ -44,6 +51,14 @@
     <details><summary>查看 JSON / 抓取来源</summary><pre id="jsonOutput"></pre></details>
   </section>
 </main>
+<dialog id="productDialog" aria-labelledby="editTitle">
+  <form id="productEditForm">
+    <h2 id="editTitle">编辑产品</h2>
+    <div id="editFields"></div>
+    <p id="editError" role="alert"></p>
+    <div class="actions"><button type="submit" class="primary">保存</button><button type="button" id="cancelEdit">取消</button></div>
+  </form>
+</dialog>
 <script>
 'use strict';
 const $ = selector => document.querySelector(selector);
@@ -51,6 +66,9 @@ let data = {products: [], rows: [], errors: []};
 let library = [];
 let busy = true;
 let libraryLoaded = false;
+const editableFields = [{key:'price', label:'价格', type:'text'}, {key:'purchase_url', label:'购买链接', type:'url', compare:false}];
+let editingId = null;
+let inlineEdit = null;
 function node(tag, text, className) {
   const element = document.createElement(tag);
   if (text !== undefined) element.textContent = text;
@@ -62,7 +80,7 @@ function normalized(value) {
 }
 function rebuildRows() {
   const rows = new Map();
-  data.products.forEach((product, index) => product.attributes.forEach(attribute => {
+  data.products.forEach((product, index) => [...editableFields.filter(field => field.compare !== false).map(field => ({name:field.label, canonical_name:field.label, value:product.fields?.[field.key] || ''})), ...product.attributes].forEach(attribute => {
     const key = attribute.canonical_name.normalize('NFKC').replace(/[\s:：]+/g, '').toLowerCase();
     if (!rows.has(key)) rows.set(key, {key, name: attribute.canonical_name, cells: data.products.map(() => [])});
     rows.get(key).cells[index].push({name: attribute.name, value: attribute.value});
@@ -102,6 +120,55 @@ function filterProducts() {
   $('#pendingCount').textContent = `${query ? '匹配 ' + visible + ' / ' : '共 '}${library.length} 款 · 已加入 ${data.products.length} 款`;
   $('#pendingEmpty').hidden = visible > 0 || !library.length;
 }
+function appendPurchaseLink(target, product) {
+  if (!product.fields?.purchase_url) return;
+  const link = node('a', '购买链接');
+  link.href = product.fields.purchase_url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+  link.style.textDecoration = 'underline'; target.append('  ', link);
+}
+async function saveFields(id, fields) {
+  if (busy) return false;
+  busy = true; render();
+  $('#productEditForm').querySelectorAll('input, button').forEach(element => element.disabled = true);
+  try {
+    const response = await fetch('/api/products/update', {method:'POST', cache:'no-store', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, fields})});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || '保存失败');
+    syncLibrary(library.map(product => product.id === result.id ? {...product, fields:result.fields} : product));
+    inlineEdit = null;
+    $('#errors').textContent = ''; $('#editError').textContent = '';
+    $('#status').textContent = '已保存产品信息，列表与对比表格已同步更新。';
+    return true;
+  } catch (error) {
+    ($('#productDialog').open ? $('#editError') : $('#errors')).textContent = error.message;
+    return false;
+  } finally {
+    busy = false;
+    $('#productEditForm').querySelectorAll('input, button').forEach(element => element.disabled = false);
+    render();
+  }
+}
+function editProduct(product) {
+  if (busy) return;
+  editingId = product.id; inlineEdit = null;
+  $('#editTitle').textContent = '编辑 ' + product.model;
+  $('#editError').textContent = '';
+  $('#editFields').replaceChildren(...editableFields.map(field => {
+    const label = node('label', field.label), input = node('input');
+    input.name = field.key; input.type = field.type;
+    input.value = product.fields?.[field.key] || '';
+    if (field.key === 'price') input.inputMode = 'decimal';
+    label.append(input); return label;
+  }));
+  $('#productDialog').showModal();
+}
+$('#productEditForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  const fields = Object.fromEntries(new FormData(event.currentTarget));
+  if (await saveFields(editingId, fields)) $('#productDialog').close();
+});
+$('#cancelEdit').addEventListener('click', () => $('#productDialog').close());
+$('#productDialog').addEventListener('cancel', event => {if (busy) event.preventDefault();});
 function render() {
   $('#pending').hidden = !library.length;
   $('#result').hidden = !data.products.length;
@@ -113,7 +180,7 @@ function render() {
     const card = node('div', undefined, 'product');
     const selected = data.products.some(item => item.id === product.id);
     card.dataset.selected = String(selected);
-    card.dataset.search = (product.model + ' ' + product.id).toLowerCase();
+    card.dataset.search = [product.model, product.id, ...Object.values(product.fields || {}), ...product.attributes.flatMap(attribute => [attribute.name, attribute.canonical_name, attribute.value])].join(' ').toLowerCase();
     const add = node('button', selected ? '已加入对比' : '加入对比');
     add.type = 'button'; add.disabled = busy || selected;
     add.setAttribute('aria-label', '加入对比 ' + product.model);
@@ -167,6 +234,34 @@ function render() {
       }
     });
     card.append(remove, add, title, node('div', 'ID：' + product.id + ' · ' + product.attributes.length + ' 条原始记录 · ' + new Date(product.fetched_at).toLocaleString('zh-CN'), 'hint'), link);
+    const fields = node('div', undefined, 'product-fields');
+    fields.append(node('span', '价格：'));
+    if (inlineEdit?.id === product.id) {
+      const input = node('input'); input.type = 'text'; input.inputMode = 'decimal';
+      input.value = inlineEdit.value; input.disabled = busy;
+      input.setAttribute('aria-label', product.model + '价格');
+      input.addEventListener('input', () => {inlineEdit.value = input.value;});
+      input.addEventListener('blur', () => {if (inlineEdit?.id === product.id && !busy) saveFields(product.id, {price:input.value});});
+      input.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {event.preventDefault(); input.blur();}
+        if (event.key === 'Escape') {inlineEdit = null; render();}
+      });
+      fields.append(input);
+    } else {
+      const price = node('span', product.fields?.price ? '￥' + product.fields.price : '未填写', 'price');
+      price.tabIndex = 0; price.setAttribute('role', 'button'); price.title = '点击编辑价格，回车或失焦保存，Esc 取消';
+      price.addEventListener('click', () => {
+        if (busy) return;
+        inlineEdit = {id:product.id, value:product.fields?.price || ''}; render();
+        const input = $('#products').querySelector('.product-fields input'); input.focus(); input.select();
+      });
+      price.addEventListener('keydown', event => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault(); price.click();}});
+      fields.append(price);
+    }
+    appendPurchaseLink(fields, product);
+    const edit = node('button', '编辑'); edit.type = 'button'; edit.disabled = busy;
+    edit.addEventListener('click', () => editProduct(product));
+    fields.append(edit); card.append(fields);
     $('#products').append(card);
   });
   filterProducts();
@@ -193,14 +288,16 @@ function render() {
     tr.className = (row.status === 'different' ? 'diff' : row.status) + ($('#highlight').checked ? ' mark' : '');
     const title = node('th', row.name); title.scope = 'row';
     title.append(node('span', {same:'相同', different:'不同', missing:'存在缺项', single:'单产品'}[row.status], 'badge')); tr.append(title);
-    row.cells.forEach(cell => {
+    row.cells.forEach((cell, productIndex) => {
       const td = node('td');
       if (!cell.length) td.append(node('span', '未列出', 'absent'));
       cell.forEach((entry, index) => {
         if (index) td.append(node('hr'));
-        if ($('#originalNames').checked) td.append(node('span', entry.name, 'original'));
-        const text = node('span', entry.value === '' ? '（原表为空）' : entry.value);
+        if ($('#originalNames').checked && row.name !== '价格') td.append(node('span', entry.name, 'original'));
+        const manual = editableFields.find(field => field.label === row.name);
+        const text = node('span', entry.value === '' ? (manual ? '未填写' : '（原表为空）') : manual?.key === 'price' ? '￥' + entry.value : entry.value);
         td.append(text);
+        if (manual?.key === 'price') appendPurchaseLink(td, data.products[productIndex]);
       });
       tr.append(td);
     });
